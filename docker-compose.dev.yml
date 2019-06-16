@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  nginx:
+    restart: always
+    build: 
+      dockerfile: Dockerfile
+      context: ./nginx
+    ports:
+      - '80:80'
+  api:
+    build: 
+      dockerfile: Dockerfile.dev
+      context: ./server
+    volumes: 
+      - /usr/src/app/node_modules
+      - ./server:/usr/src/app
+    environment: 
+      - DISCORD_BOT_TOKEN=${DISCORD_BOT_TOKEN}
+      - MONGO_CONNECTION_STRING=${MONGO_CONNECTION_STRING}
+  client:
+    build: 
+      dockerfile: Dockerfile.dev
+      context: ./client
+    volumes: 
+      - /usr/src/app/node_modules
+      - ./client:/usr/src/app
